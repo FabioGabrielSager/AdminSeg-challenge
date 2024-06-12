@@ -88,3 +88,12 @@ git clone https://github.com/FabioGabrielSager/AdminSeg-challenge.git
 | furnitureseller  | furnitureseller@email.com   | furnitureseller  |  USER     |
 | gamingseller     | gamingseller@email.com      | gamingseller     |  USER     |
 | instrumentseller | instrumentseller@email.com  | instrumentseller |  USER     |
+
+## Roles y privilegios:
+- ROLE_USER.
+  - Acceso a CRUD de producto.
+  - Acceso a CRUD de su cuenta.
+- ROLE_ADMIN.
+  - Acceso a CRUD de producto.
+  - Acceso a CRUD de su cuenta.
+  - Acceso a CRUD de categorías.
