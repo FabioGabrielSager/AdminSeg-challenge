@@ -1,0 +1,9 @@
+<div class="vh-100">
+  @if(isProductDataLoaded) {
+    <app-product-form (onSubmitForm)="onSubmitForm($event)"
+                      [initialData]="product"
+                      [formTitle]="'Producto ID: ' + productId"
+                      [submitButtonText]="'guardar cambios'"/>
+
+  }
+</div>

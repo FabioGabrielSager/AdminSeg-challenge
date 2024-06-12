@@ -1,0 +1,6 @@
+<div class="container-fluid pb-5" [ngClass]="productsPage.totalMatches === 0 ? 'vh-100' : ''">
+  <app-product-finder (onSearch)="onSearch($event)"/>
+  <div class="container w-75 mt-3">
+    <app-product-display (onPageChange)="onPageChange($event)" [productsPage]="productsPage"/>
+  </div>
+</div>

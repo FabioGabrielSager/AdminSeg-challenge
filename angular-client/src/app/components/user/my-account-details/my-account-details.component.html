@@ -1,0 +1,53 @@
+<div class="vh-100 d-flex justify-content-center align-self-center">
+  <div class="d-flex justify-content-center align-items-center w-100">
+    <div class="shadow p-5 rounded-3 col col-sm-10 col-md-8 col-lg-6 mx-auto">
+      <h3>Tu cuenta</h3>
+      <form [formGroup]="userForm" (ngSubmit)="onModifyFormSubmit()">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" formControlName="email"
+                 [class.is-invalid]="(userForm.controls['email'].touched || userForm.controls['email'].dirty)
+                 && userForm.controls['email'].invalid">
+
+          @if ((userForm.controls["email"].touched || userForm.controls["email"].dirty
+            && userForm.controls["email"].invalid)) {
+            <div class="text-danger fst-italic">
+              @if (userForm.controls['email'].hasError("required")) {
+                <span>Este campo es requerido.</span>
+              }
+              @if (userForm.controls['email'].hasError("email")) {
+                <span>La dirección de correo no tiene un formato valido.</span>
+              }
+            </div>
+          }
+          @if(isEmailPicked) {
+            <span class="text-danger fst-italic">Ya éxiste una cuenta registrada con este email.</span>
+          }
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">usuario</label>
+          <input type="text" class="form-control" id="username" formControlName="username"
+                 [class.is-invalid]="(userForm.controls['username'].touched || userForm.controls['username'].dirty)
+                 && userForm.controls['username'].invalid">
+
+          @if ((userForm.controls["username"].touched || userForm.controls["username"].dirty
+            && userForm.controls["username"].invalid)) {
+            <div class="text-danger fst-italic">
+              @if (userForm.controls['username'].hasError("required")) {
+                <span>Este campo es requerido.</span>
+              }
+            </div>
+          }
+          @if(isUsernamePicked) {
+            <span class="text-danger fst-italic">Este nombre usuario no esta disponible.</span>
+          }
+        </div>
+        <div class="d-flex flex-column align-items-end">
+          <button type="submit" class="btn btn-primary w-100 mb-4">Guardar cambios</button>
+          <button type="button" class="btn btn-danger w-100 mb-2" (click)="onChangePassword()">Cambiar contraseña</button>
+          <button type="button" class="btn btn-danger w-100" (click)="onDeleteAccount()">Eliminar cuenta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

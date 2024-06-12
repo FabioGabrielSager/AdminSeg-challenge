@@ -1,0 +1,55 @@
+<nav class="navbar nav-menu navbar-expand-md">
+  <div class="container-fluid d-flex"
+       [ngClass]="itemsJustification">
+    @if (showBrand) {
+      <a class="navbar-brand" style="font-weight: bold" routerLink="{{brandLink}}">Challenge</a>
+    }
+
+    @if (collapse) {
+      <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas"
+              (click)="onClickCollapsedNav(offcanvas)"
+              data-bs-target="#navbarNav" aria-controls="navbarNav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    }
+
+    <div [ngClass]="collapse ? 'd-none d-md-block' : 'd-block'"
+         [class.w-100]="!showBrand"
+         tabindex="-1" id="navbarNav">
+      <ul class="navbar-nav flex-row pe-3 w-100" [ngClass]="itemsJustification">
+        @for (ni of navBarItems; track ni) {
+          <li class="nav-item ms-2">
+            <a class="nav-link d-flex align-items-center rounded-5"
+               [href]="ni.href ? ni.href : null"
+               [routerLink]="ni.routerLink ? ni.routerLink : null"
+               (click)="handleClick(ni.onClick)">
+              <span [style.color]="itemsColor" [style.font-size]="itemsTitleFontSize">
+                  {{ ni.title }}
+                </span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+  <ng-template #offcanvas let-offcanvas class="offcanvas offcanvas-end">
+    <div class="offcanvas-header">
+      <button type="button" class="btn-close" (click)="offcanvas.dismiss('Cross click')"
+              aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <ul class="navbar-nav">
+        @for (ni of navBarItems; track ni) {
+          <li class="nav-item ms-2 mb-2">
+            <a class="nav-link text-center border border-primary-subtle rounded-5"
+               [href]="ni.href"
+               [routerLink]="ni.routerLink"
+               (click)="handleClick(ni.onClick)">
+              <span> {{ ni.title }} </span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </ng-template>
+</nav>

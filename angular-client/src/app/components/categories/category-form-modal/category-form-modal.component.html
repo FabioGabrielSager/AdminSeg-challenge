@@ -1,0 +1,41 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">{{ title }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="name" formControlName="name"
+               [class.is-invalid]="categoryForm.controls['name'].touched && categoryForm.controls['name'].invalid">
+        @if (categoryForm.controls["name"].touched && categoryForm.controls["name"].hasError("required")) {
+          <div class="text-danger fst-italic">
+            <span>Este campo es requerido.</span>
+          </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="icon" class="form-label">Imagen</label>
+        <input type="file" class="form-control" id="icon" (change)="onFileChange($event)"
+               [class.is-invalid]="categoryForm.controls['icon'].touched && categoryForm.controls['icon'].invalid"
+               alt="product image">
+        @if (categoryForm.controls["icon"].touched && categoryForm.controls["icon"].hasError("required")) {
+          <div class="text-danger fst-italic">
+            <span>Este campo es requerido.</span>
+          </div>
+        }
+      </div>
+      @if(imagePreview) {
+        <div>
+          <img [src]="imagePreview"  alt="Image Preview" class="img-thumbnail" style="max-width: 20px;">
+        </div>
+      }
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">Guardar</button>
+  </div>
+</div>

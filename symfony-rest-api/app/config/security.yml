@@ -1,0 +1,55 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/security.html
+security:
+  encoders:
+    AppBundle\Entity\User:
+      algorithm: bcrypt
+
+  providers:
+    our_db_provider:
+      entity:
+        class: AppBundle:User
+
+  firewalls:
+    # disables authentication for assets and the profiler, adapt it according to your needs
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    login:
+      provider: our_db_provider
+      pattern: ^/api/secure/login
+      stateless: true
+      anonymous: true
+      form_login:
+        check_path: /api/secure/login_check
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        require_previous_session: false
+        username_parameter: username
+        password_parameter: password
+
+    api:
+      pattern: ^/api/secure
+      stateless: true
+      provider: our_db_provider
+      lexik_jwt:
+        authorization_header: # check token in Authorization Header
+          enabled: true
+          prefix: Bearer
+          name: Authorization
+        cookie: # check token in a cookie
+          enabled: true
+          name: '%jwt_cookie_name%'
+        query_parameter: # check token in query string parameter
+          enabled: false
+          name: bearer
+        throw_exceptions: false     # When an authentication failure occurs, return a 401 response immediately
+        create_entry_point: true      # When no authentication details are provided, create a default entry point that returns a 401 response
+        authentication_provider: lexik_jwt_authentication.security.authentication.provider
+        authentication_listener: lexik_jwt_authentication.security.authentication.listener
+
+  access_control:
+    - { path: ^/api/secure/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/user/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/secure,       roles: IS_AUTHENTICATED_FULLY }

@@ -1,0 +1,75 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+  app.exception_listener:
+    class: AppBundle\EventListener\ExceptionListener
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception }
+
+  app.authentication_success_listener:
+    class: AppBundle\EventListener\AuthenticationSuccessListener
+    arguments:
+      $jwtCookieName: '%jwt_cookie_name%'
+    tags:
+      - { name: kernel.event_listener,
+          event: lexik_jwt_authentication.on_authentication_success,
+          method: onAuthenticationSuccess }
+
+  # Repositories
+  user_repository:
+    class: AppBundle\Repository\Implementation\UserRepository
+    autowiring_types: AppBundle\Repository\UserRepositoryInterface
+    factory: [ '@doctrine.orm.entity_manager', getRepository ]
+    arguments:
+      - AppBundle\Entity\User
+
+  product_repository:
+    class: AppBundle\Repository\Implementation\ProductRepository
+    autowiring_types: AppBundle\Repository\ProductRepositoryInterface
+    factory: [ '@doctrine.orm.entity_manager', getRepository ]
+    arguments:
+      - AppBundle\Entity\Product
+
+  category_repository:
+    class: AppBundle\Repository\Implementation\CategoryRepository
+    autowiring_types: AppBundle\Repository\CategoryRepositoryInterface
+    factory: [ '@doctrine.orm.entity_manager', getRepository ]
+    arguments:
+      - AppBundle\Entity\Category
+
+  role_repository:
+    class: AppBundle\Repository\Implementation\RoleRepository
+    autowiring_types: AppBundle\Repository\RoleRepositoryInterface
+    factory: [ '@doctrine.orm.entity_manager', getRepository ]
+    arguments:
+      - AppBundle\Entity\Role
+
+  # Services
+  user_service:
+    class: AppBundle\Service\Implementation\UserService
+    autowiring_types: AppBundle\Service\UserServiceInterface
+    autowire: true
+
+  category_service:
+    class: AppBundle\Service\Implementation\CategoryService
+    autowiring_types: AppBundle\Service\CategoryServiceInterface
+    autowire: true
+
+  product_service:
+    class: AppBundle\Service\Implementation\ProductService
+    autowiring_types: AppBundle\Service\ProductServiceInterface
+    autowire: true
+
+  jwt_service:
+    class: AppBundle\Service\Implementation\JwtService
+    arguments: [ '@lexik_jwt_authentication.jwt_encoder', '%jwt_cookie_name%' ]
+    autowiring_types: AppBundle\Service\JwtServiceInterface
+    autowire: true
+
+  file_uploader:
+    class: AppBundle\Service\Implementation\FileUploader
+    autowiring_types: AppBundle\Service\FileUploaderInterface
+    arguments: [ '%kernel.root_dir%/../web/uploads', '@router']

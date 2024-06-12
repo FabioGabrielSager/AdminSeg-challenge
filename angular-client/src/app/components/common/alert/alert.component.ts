@@ -1,0 +1,43 @@
+import {Component, inject, Input, TemplateRef} from '@angular/core';
+import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgTemplateOutlet} from "@angular/common";
+
+
+export class BodyString {
+  fontSize: string = '1rem';
+  fontColor: string = '';
+  fontWeight: string = '';
+  textParagraphs: string[] = [];
+}
+
+@Component({
+  selector: 'rr-alert',
+  standalone: true,
+  imports: [
+    NgTemplateOutlet
+  ],
+  templateUrl: './alert.component.html',
+  styleUrl: './alert.component.css'
+})
+export class AlertComponent {
+  activeModal: NgbActiveModal = inject(NgbActiveModal);
+  @Input() title: string = "";
+  @Input() bodyTemplate: null | TemplateRef<any> = null;
+  @Input() bodyString: BodyString | null = null;
+  @Input() isAConfirm: boolean = false;
+  @Input() confirmBehavior: Function | null = null;
+  @Input() closeModalAfterConfirm: boolean = true;
+
+  handleConfirmClick(): void {
+    if (this.confirmBehavior) {
+      this.confirmBehavior();
+    }
+    if (this.closeModalAfterConfirm) {
+      this.activeModal.dismiss();
+    }
+  }
+
+  isTemplate(): boolean {
+    return this.bodyTemplate != null;
+  }
+}

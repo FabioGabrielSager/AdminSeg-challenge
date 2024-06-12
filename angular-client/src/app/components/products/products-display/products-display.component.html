@@ -1,0 +1,69 @@
+<div class="row row-gap-3 column-gap-0">
+  @if (productsPage.totalMatches == 0) {
+    <div class="col-12 d-flex flex-column align-items-center mt-5 pt-5">
+      <h4>No se encontraron coincidencias</h4>
+      <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-search"
+           viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a
+            1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+      </svg>
+    </div>
+  } @else {
+    @for (product of productsPage.products; track product.id) {
+      <div class="col-12 col-md-6 col-lg-4 d-flex d-lg-block justify-content-center">
+        <div class="card h-100" style="width: 17rem;">
+          @if (product.image) {
+            <img [src]="product.image" height="300px" width="300px" class="card-img-top" alt="{{product.name}} image">
+          }
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-subtitle">
+              {{ product.category.name }}
+              @if (product.category.icon) {
+                <img [src]="product.category.icon" class="card-img-top" style="max-width: 20px" alt="{{product.category.name}} category icon">
+              }
+            </p>
+          </div>
+          @if (showSeeProductBtn || showDeleteProductBtn) {
+            <div class="card-footer d-flex justify-content-between">
+              @if(showDeleteProductBtn) {
+                <button class="btn btn-danger" (click)="onDeleteProductClick(product.id)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill"
+                       viewBox="0 0 16 16">
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0
+                  0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5
+                  0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                  </svg>
+                </button>
+              }
+              @if(showSeeProductBtn) {
+                <button class="btn btn-primary" (click)="onSeeProductClick(product.id)">Ver producto</button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+    <div class="col-12">
+      <ngb-pagination class="d-flex justify-content-center" [pageSize]="productsPage.limit"
+                      [collectionSize]="productsPage.totalMatches"
+                      [(page)]="productsPage.page" [directionLinks]="false">
+        <ng-template ngbPaginationPrevious>
+          <span (click)="onSelectPreviousPage()">&laquo;</span>
+        </ng-template>
+        <ng-template ngbPaginationPages let-page let-pages="pages">
+          @if (pages.length > 0) {
+            @for (p of pages; track p) {
+              <li class="page-item" (click)="onSelectSpecificPage(p)">
+                <a class="page-link">{{ p }}</a>
+              </li>
+            }
+          }
+        </ng-template>
+        <ng-template ngbPaginationNext>
+          <span (click)="onSelectNextPage()">&raquo;</span>
+        </ng-template>
+      </ngb-pagination>
+    </div>
+  }
+</div>

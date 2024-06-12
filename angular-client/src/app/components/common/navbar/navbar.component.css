@@ -1,0 +1,4 @@
+.nav-link:hover {
+  cursor: pointer;
+  background-color: var(--bs-primary-bg-subtle);
+}
